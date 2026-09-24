@@ -22,7 +22,21 @@
     "purchasingFlag": true,
     "payFlag": true
   },
+  "bankAccount": {
+    "bankName": "JPMorgan Chase Bank",
+    "branchName": "Seattle Main",
+    "accountNumber": "000123456789",
+    "accountName": "Acme Coffee Beans Ltd",
+    "currencyCode": "USD",
+    "countryCode": "US",
+    "accountType": "CHECKING"
+  },
   "contacts": [
-    { "firstName": "Jane", "lastName": "Doe", "email": "jane.doe@acme.example", "phone": "+1-206-555-0100" }
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "email": "jane.doe@acme.example",
+      "phone": "+1-206-555-0100"
+    }
   ]
 }

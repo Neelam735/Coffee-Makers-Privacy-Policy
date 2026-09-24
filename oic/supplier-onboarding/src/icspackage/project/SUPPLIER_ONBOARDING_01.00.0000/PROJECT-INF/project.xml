@@ -72,12 +72,59 @@
          </outbound>
       </application>
 
+      <!-- Invoke 5: POST /fscmRestApi/resources/11.13.18.05/externalBankAccounts (owner = supplier party) -->
+      <application name="CreateBankAccount" id="application_5">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_5">
+            <operation>POST</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/externalBankAccounts</relativeUri>
+            <resourcegroup id="resourcegroup_6">
+               <jca>CreateBankAccount_REQUEST.jca</jca>
+               <requestSchema>ErpExternalBankAccount.xsd</requestSchema>
+               <responseSchema>ErpExternalBankAccount.xsd</responseSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
+      <!-- Invoke 6: GET /fscmRestApi/resources/11.13.18.05/paymentsExternalPayees?q=PayeePartyIdentifier=... -->
+      <application name="GetSupplierPayee" id="application_6">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_6">
+            <operation>GET</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/paymentsExternalPayees</relativeUri>
+            <queryParameters><param name="q"/><param name="fields"/><param name="onlyData"/></queryParameters>
+            <resourcegroup id="resourcegroup_7">
+               <jca>GetSupplierPayee_REQUEST.jca</jca>
+               <responseSchema>ErpPayeeQueryResponse.xsd</responseSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
+      <!-- Invoke 7: POST /fscmRestApi/resources/11.13.18.05/instrumentAssignments (bank account -> payee) -->
+      <application name="AssignBankAccount" id="application_7">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_7">
+            <operation>POST</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/instrumentAssignments</relativeUri>
+            <resourcegroup id="resourcegroup_8">
+               <jca>AssignBankAccount_REQUEST.jca</jca>
+               <requestSchema>ErpInstrumentAssignment.xsd</requestSchema>
+               <responseSchema>ErpInstrumentAssignment.xsd</responseSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
       <orchestration id="processor_1" name="SupplierOnboardingFlow">
          <receive id="receive_1" application="application_1"/>
          <assign id="assign_1" name="InitVariables">
             <variable name="vStatus" type="string">PENDING</variable>
             <variable name="vSupplierId" type="string"/>
             <variable name="vErrors" type="string"/>
+            <variable name="vBankAccountStatus" type="string">NOT_REQUESTED</variable>
+            <variable name="vBankFaultMessage" type="string"/>
          </assign>
          <router id="router_1" name="ValidateRequest">
             <route id="route_invalid" name="Invalid">
@@ -114,6 +161,31 @@
                            </defaultHandler>
                         </faultHandler>
                      </scope>
+                     <!-- Bank account is optional and isolated: a failure here does not undo the supplier -->
+                     <router id="router_3" name="BankAccountRequested">
+                        <route id="route_bank" name="HasBankAccount">
+                           <condition>string-length(normalize-space($SupplierOnboardingRequest/bankAccount/accountNumber)) &gt; 0</condition>
+                           <scope id="scope_2" name="BankAccountScope">
+                              <transformer ref="processor_1/resourcegroup_5/map_create_bank_account.xsl" target="application_5"/>
+                              <invoke id="invoke_6" application="application_5"/>
+                              <transformer ref="processor_1/resourcegroup_5/map_get_supplier_payee.xsl" target="application_6"/>
+                              <invoke id="invoke_7" application="application_6"/>
+                              <transformer ref="processor_1/resourcegroup_5/map_assign_bank_account.xsl" target="application_7"/>
+                              <invoke id="invoke_8" application="application_7"/>
+                              <assign id="assign_3"><variable name="vBankAccountStatus">'CREATED'</variable></assign>
+                              <faultHandler>
+                                 <defaultHandler>
+                                    <assign id="assign_4">
+                                       <variable name="vBankAccountStatus">'FAILED'</variable>
+                                       <variable name="vBankFaultMessage">$ScopeFault/reason</variable>
+                                    </assign>
+                                    <notification id="notify_2" to="$NotificationEmail" subject="Supplier $SupplierName created, bank account failed"/>
+                                 </defaultHandler>
+                              </faultHandler>
+                           </scope>
+                        </route>
+                        <route id="route_no_bank" name="Otherwise" default="true"/>
+                     </router>
                      <transformer ref="processor_1/resourcegroup_5/map_success_response.xsl" target="application_1"/>
                   </route>
                </router>

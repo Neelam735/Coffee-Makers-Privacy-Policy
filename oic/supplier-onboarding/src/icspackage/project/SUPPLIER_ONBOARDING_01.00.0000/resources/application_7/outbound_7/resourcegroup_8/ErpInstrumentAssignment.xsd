@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/oic/erp/suppliers" elementFormDefault="qualified">
+   <xsd:element name="InstrumentAssignment">
+      <xsd:complexType><xsd:sequence>
+         <xsd:element name="PaymentInstrumentAssignmentId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="PaymentPartyId" type="xsd:string"/>
+         <xsd:element name="PaymentInstrumentId" type="xsd:string"/>
+         <xsd:element name="PaymentInstrumentType" type="xsd:string"/>
+         <xsd:element name="PrimaryIndicator" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="StartDate" type="xsd:date" minOccurs="0"/>
+      </xsd:sequence></xsd:complexType>
+   </xsd:element>
+</xsd:schema>

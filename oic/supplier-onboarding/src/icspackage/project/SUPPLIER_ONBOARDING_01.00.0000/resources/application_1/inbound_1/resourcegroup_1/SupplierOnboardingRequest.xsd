@@ -29,6 +29,18 @@
                <xsd:element name="payFlag" type="xsd:boolean" minOccurs="0"/>
             </xsd:sequence></xsd:complexType>
          </xsd:element>
+         <xsd:element name="bankAccount" minOccurs="0">
+            <xsd:complexType><xsd:sequence>
+               <xsd:element name="bankName" type="xsd:string"/>
+               <xsd:element name="branchName" type="xsd:string"/>
+               <xsd:element name="accountNumber" type="xsd:string"/>
+               <xsd:element name="iban" type="xsd:string" minOccurs="0"/>
+               <xsd:element name="accountName" type="xsd:string" minOccurs="0"/>
+               <xsd:element name="currencyCode" type="xsd:string" minOccurs="0"/>
+               <xsd:element name="countryCode" type="xsd:string" minOccurs="0"/>
+               <xsd:element name="accountType" type="xsd:string" minOccurs="0"/>
+            </xsd:sequence></xsd:complexType>
+         </xsd:element>
          <xsd:element name="contacts" minOccurs="0" maxOccurs="unbounded">
             <xsd:complexType><xsd:sequence>
                <xsd:element name="firstName" type="xsd:string"/>

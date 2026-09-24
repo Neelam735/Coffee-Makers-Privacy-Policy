@@ -1,0 +1,1 @@
+{ "requestId": "ONB-2026-000123", "status": "PARTIALLY_CREATED", "supplierId": "300000123456789", "supplierNumber": "1234", "bankAccountStatus": "FAILED", "message": "Supplier, address, site and contacts created, but the bank account could not be created: <ERP error text>" }

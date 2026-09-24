@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/oic/erp/suppliers" elementFormDefault="qualified">
+   <xsd:element name="ExternalBankAccount">
+      <xsd:complexType><xsd:sequence>
+         <xsd:element name="BankAccountId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BankName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BankBranchName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BankAccountNumber" type="xsd:string"/>
+         <xsd:element name="IBAN" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AccountName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="CountryCode" type="xsd:string"/>
+         <xsd:element name="CurrencyCode" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AccountType" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="accountOwners" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType><xsd:sequence>
+               <xsd:element name="AccountOwnerPartyIdentifier" type="xsd:string"/>
+               <xsd:element name="PrimaryOwnerIndicator" type="xsd:string"/>
+            </xsd:sequence></xsd:complexType>
+         </xsd:element>
+      </xsd:sequence></xsd:complexType>
+   </xsd:element>
+</xsd:schema>
