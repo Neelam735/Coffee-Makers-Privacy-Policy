@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/oic/supplier-onboarding" xmlns:tns="http://xmlns.example.com/oic/supplier-onboarding" elementFormDefault="qualified">
+   <xsd:element name="SupplierOnboardingResponse">
+      <xsd:complexType><xsd:sequence>
+         <xsd:element name="requestId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="status" type="xsd:string"/>
+         <xsd:element name="supplierId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="supplierNumber" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="message" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence></xsd:complexType>
+   </xsd:element>
+</xsd:schema>

@@ -1,0 +1,134 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<icsproject xmlns="http://www.oracle.com/2014/03/ics/project/definition">
+   <projectCode>SUPPLIER_ONBOARDING</projectCode>
+   <projectVersion>01.00.0000</projectVersion>
+   <projectName>Supplier Onboarding</projectName>
+   <projectDescription>Receives a supplier onboarding request over REST, validates it, checks Oracle ERP Cloud for a duplicate supplier, creates the supplier with its address, site and contact, and returns the new Supplier ID.</projectDescription>
+   <projectType>ORCHESTRATION</projectType>
+   <projectPattern>APP_DRIVEN</projectPattern>
+   <projectIdentifier>
+      <primaryIdentifier>$SupplierName</primaryIdentifier>
+      <secondaryIdentifier>$TaxRegistrationNumber</secondaryIdentifier>
+   </projectIdentifier>
+   <icsflow>
+      <!-- Trigger: POST /supplier-onboarding/v1/suppliers -->
+      <application name="SupplierOnboardingRequest" id="application_1">
+         <adapter><name>rest</name><type>trigger</type></adapter>
+         <appInstanceRef>SUPPLIER_ONB_REST_TRIGGER</appInstanceRef>
+         <inbound id="inbound_1">
+            <operation>POST</operation>
+            <relativeUri>/suppliers</relativeUri>
+            <resourcegroup id="resourcegroup_1">
+               <jca>SupplierOnboardingRequest_REQUEST.jca</jca>
+               <wsdl>SupplierOnboardingRequest.wsdl</wsdl>
+               <requestSchema>SupplierOnboardingRequest.xsd</requestSchema>
+               <responseSchema>SupplierOnboardingResponse.xsd</responseSchema>
+            </resourcegroup>
+         </inbound>
+      </application>
+
+      <!-- Invoke 1: GET /fscmRestApi/resources/11.13.18.05/suppliers?q=Supplier='...' -->
+      <application name="CheckExistingSupplier" id="application_2">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_2">
+            <operation>GET</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/suppliers</relativeUri>
+            <queryParameters><param name="q"/><param name="fields"/><param name="onlyData"/></queryParameters>
+            <resourcegroup id="resourcegroup_2">
+               <jca>CheckExistingSupplier_REQUEST.jca</jca>
+               <responseSchema>ErpSupplierQueryResponse.xsd</responseSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
+      <!-- Invoke 2: POST /fscmRestApi/resources/11.13.18.05/suppliers -->
+      <application name="CreateSupplier" id="application_3">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_3">
+            <operation>POST</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/suppliers</relativeUri>
+            <resourcegroup id="resourcegroup_3">
+               <jca>CreateSupplier_REQUEST.jca</jca>
+               <requestSchema>ErpSupplier.xsd</requestSchema>
+               <responseSchema>ErpSupplier.xsd</responseSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
+      <!-- Invoke 3: POST /suppliers/{SupplierId}/child/addresses, /sites, /contacts (called in sequence) -->
+      <application name="CreateSupplierChildren" id="application_4">
+         <adapter><name>rest</name><type>invoke</type></adapter>
+         <appInstanceRef>ORACLE_ERP_CLOUD_REST</appInstanceRef>
+         <outbound id="outbound_4">
+            <operation>POST</operation>
+            <relativeUri>/fscmRestApi/resources/11.13.18.05/suppliers/{SupplierId}/child/{childResource}</relativeUri>
+            <templateParameters><param name="SupplierId"/><param name="childResource"/></templateParameters>
+            <resourcegroup id="resourcegroup_4">
+               <jca>CreateSupplierChildren_REQUEST.jca</jca>
+               <requestSchema>ErpSupplierChildren.xsd</requestSchema>
+            </resourcegroup>
+         </outbound>
+      </application>
+
+      <orchestration id="processor_1" name="SupplierOnboardingFlow">
+         <receive id="receive_1" application="application_1"/>
+         <assign id="assign_1" name="InitVariables">
+            <variable name="vStatus" type="string">PENDING</variable>
+            <variable name="vSupplierId" type="string"/>
+            <variable name="vErrors" type="string"/>
+         </assign>
+         <router id="router_1" name="ValidateRequest">
+            <route id="route_invalid" name="Invalid">
+               <condition>string-length(normalize-space($SupplierName)) = 0 or string-length(normalize-space($TaxRegistrationNumber)) = 0 or string-length(normalize-space($Country)) = 0</condition>
+               <transformer ref="processor_1/resourcegroup_5/map_validation_error.xsl" target="application_1"/>
+               <return/>
+            </route>
+            <route id="route_valid" name="Otherwise" default="true">
+               <transformer ref="processor_1/resourcegroup_5/map_check_supplier.xsl" target="application_2"/>
+               <invoke id="invoke_1" application="application_2"/>
+               <router id="router_2" name="SupplierExists">
+                  <route id="route_exists" name="Exists">
+                     <condition>number($CheckExistingSupplier/count) &gt; 0</condition>
+                     <transformer ref="processor_1/resourcegroup_5/map_duplicate_response.xsl" target="application_1"/>
+                     <return/>
+                  </route>
+                  <route id="route_new" name="Otherwise" default="true">
+                     <scope id="scope_1" name="CreateSupplierScope">
+                        <transformer ref="processor_1/resourcegroup_5/map_create_supplier.xsl" target="application_3"/>
+                        <invoke id="invoke_2" application="application_3"/>
+                        <assign id="assign_2"><variable name="vSupplierId">$CreateSupplier/SupplierId</variable></assign>
+                        <transformer ref="processor_1/resourcegroup_5/map_create_address.xsl" target="application_4"/>
+                        <invoke id="invoke_3" application="application_4" name="CreateAddress"/>
+                        <transformer ref="processor_1/resourcegroup_5/map_create_site.xsl" target="application_4"/>
+                        <invoke id="invoke_4" application="application_4" name="CreateSite"/>
+                        <for-each id="foreach_1" name="Contacts" repeatingElement="$SupplierOnboardingRequest/contacts">
+                           <transformer ref="processor_1/resourcegroup_5/map_create_contact.xsl" target="application_4"/>
+                           <invoke id="invoke_5" application="application_4" name="CreateContact"/>
+                        </for-each>
+                        <faultHandler>
+                           <defaultHandler>
+                              <transformer ref="processor_1/resourcegroup_5/map_fault_response.xsl" target="application_1"/>
+                              <return/>
+                           </defaultHandler>
+                        </faultHandler>
+                     </scope>
+                     <transformer ref="processor_1/resourcegroup_5/map_success_response.xsl" target="application_1"/>
+                  </route>
+               </router>
+            </route>
+         </router>
+         <reply id="reply_1" application="application_1"/>
+         <globalFaultHandler>
+            <notification id="notify_1" to="$NotificationEmail" subject="Supplier onboarding failed: $SupplierName"/>
+            <rethrow/>
+         </globalFaultHandler>
+      </orchestration>
+   </icsflow>
+   <lookups/>
+   <properties>
+      <property name="NotificationEmail" value="procurement-integrations@example.com"/>
+      <property name="DefaultProcurementBU" value="US1 Business Unit"/>
+   </properties>
+</icsproject>

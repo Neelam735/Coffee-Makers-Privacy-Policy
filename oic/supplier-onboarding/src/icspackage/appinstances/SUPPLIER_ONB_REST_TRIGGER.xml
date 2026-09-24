@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appInstance xmlns="http://www.oracle.com/2014/03/ics/appinstance">
+   <code>SUPPLIER_ONB_REST_TRIGGER</code>
+   <name>Supplier Onboarding REST Trigger</name>
+   <version>01.00.0000</version>
+   <adapterType>rest</adapterType>
+   <role>TRIGGER</role>
+   <description>REST trigger connection that exposes the supplier onboarding API.</description>
+   <securityPolicy>OAUTH2_OR_BASIC_AUTH_ONE_WAY_TOKEN_BASED_SECURITY_POLICY</securityPolicy>
+</appInstance>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/oic/erp/suppliers" elementFormDefault="qualified">
+   <xsd:element name="SupplierChild">
+      <xsd:complexType><xsd:sequence>
+         <!-- addresses -->
+         <xsd:element name="AddressName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AddressLine1" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AddressLine2" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="City" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="State" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="PostalCode" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="CountryCode" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AddressPurposeOrderingFlag" type="xsd:boolean" minOccurs="0"/>
+         <xsd:element name="AddressPurposeRemitToFlag" type="xsd:boolean" minOccurs="0"/>
+         <!-- sites -->
+         <xsd:element name="SupplierSite" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="ProcurementBU" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SupplierAddressName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SitePurposePurchasingFlag" type="xsd:boolean" minOccurs="0"/>
+         <xsd:element name="SitePurposePayFlag" type="xsd:boolean" minOccurs="0"/>
+         <xsd:element name="PaymentTerms" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="PaymentMethod" type="xsd:string" minOccurs="0"/>
+         <!-- contacts -->
+         <xsd:element name="FirstName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="LastName" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="PhoneNumber" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence></xsd:complexType>
+   </xsd:element>
+</xsd:schema>
