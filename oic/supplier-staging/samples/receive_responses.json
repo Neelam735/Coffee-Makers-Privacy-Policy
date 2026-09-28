@@ -1,0 +1,6 @@
+{
+  "accepted":        { "httpStatus": 202, "trackingId": 101, "status": "NEW",      "message": "Accepted for processing." },
+  "alreadyCreated":  { "httpStatus": 200, "trackingId": 101, "status": "SUCCESS",  "supplierNumber": "1234", "message": "Supplier was already created." },
+  "alreadyQueued":   { "httpStatus": 409, "trackingId": 101, "status": "IN_PROGRESS", "message": "This sourceRef is already queued or being processed." },
+  "invalid":         { "httpStatus": 400, "status": "REJECTED", "message": "Missing or invalid fields: supplierName, site.siteName" }
+}
