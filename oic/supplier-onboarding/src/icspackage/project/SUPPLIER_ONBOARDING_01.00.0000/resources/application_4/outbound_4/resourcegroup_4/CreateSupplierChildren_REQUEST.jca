@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adapter-config name="CreateSupplierChildren" adapter="rest" wsdlLocation="CreateSupplierChildren.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="" adapterRef=""/>
+   <endpoint-interaction portType="CreateSupplierChildren_ptt" operation="POST">
+      <interaction-spec className="oracle.cloud.connector.rest.RestInteractionSpec">
+         <property name="httpMethod" value="POST"/>
+         <property name="relativeUri" value="/fscmRestApi/resources/11.13.18.05/suppliers/{SupplierId}/child/{childResource}"/>
+         <property name="requestMediaType" value="application/json"/>
+         <property name="responseMediaType" value="application/json"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>

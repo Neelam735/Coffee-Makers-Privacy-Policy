@@ -1,0 +1,43 @@
+{
+  "sourceRef": "APX-2026-000123",
+  "supplierName": "Acme Coffee Beans Ltd",
+  "taxOrganizationType": "Corporation",
+  "supplierType": "Supplier",
+  "taxRegistrationNumber": "98-7654321",
+  "dunsNumber": "123456789",
+  "businessUnit": "US1 Business Unit",
+  "address": {
+    "addressName": "ACME HQ",
+    "addressLine1": "100 Roast Street",
+    "addressLine2": "Suite 5",
+    "city": "Seattle",
+    "state": "WA",
+    "postalCode": "98101",
+    "country": "US"
+  },
+  "site": {
+    "siteName": "ACME-SEA",
+    "paymentTerms": "Net 30",
+    "paymentMethod": "CHECK",
+    "purchasingFlag": true,
+    "payFlag": true
+  },
+  "tax": {
+    "taxRegimeCode": "US SALES AND USE TAX",
+    "registrationNumber": "WA-600123456",
+    "country": "US",
+    "effectiveFrom": "2026-10-01"
+  },
+  "bankAccount": {
+    "bankName": "JPMorgan Chase Bank",
+    "branchName": "Seattle Main",
+    "accountNumber": "000123456789",
+    "accountName": "Acme Coffee Beans Ltd",
+    "currencyCode": "USD",
+    "countryCode": "US",
+    "accountType": "CHECKING"
+  },
+  "contacts": [
+    { "firstName": "Jane", "lastName": "Doe", "email": "jane.doe@acme.example", "phone": "+1-206-555-0100" }
+  ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adapter-config name="AssignBankAccount" adapter="rest" wsdlLocation="AssignBankAccount.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="" adapterRef=""/>
+   <endpoint-interaction portType="AssignBankAccount_ptt" operation="POST">
+      <interaction-spec className="oracle.cloud.connector.rest.RestInteractionSpec">
+         <property name="httpMethod" value="POST"/>
+         <property name="relativeUri" value="/fscmRestApi/resources/11.13.18.05/instrumentAssignments"/>
+         <property name="requestMediaType" value="application/json"/>
+         <property name="responseMediaType" value="application/json"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>

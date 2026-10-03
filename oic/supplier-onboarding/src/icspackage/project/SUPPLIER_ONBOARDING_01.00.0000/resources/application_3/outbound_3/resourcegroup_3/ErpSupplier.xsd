@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/oic/erp/suppliers" elementFormDefault="qualified">
+   <xsd:element name="Supplier">
+      <xsd:complexType><xsd:sequence>
+         <xsd:element name="SupplierId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SupplierNumber" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SupplierPartyId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Supplier" type="xsd:string"/>
+         <xsd:element name="TaxOrganizationType" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SupplierType" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="TaxpayerId" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="DUNSNumber" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BusinessRelationship" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence></xsd:complexType>
+   </xsd:element>
+</xsd:schema>

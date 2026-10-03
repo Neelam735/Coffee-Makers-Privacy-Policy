@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SupplierOnboardingRequest" targetNamespace="http://xmlns.example.com/oic/supplier-onboarding/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.example.com/oic/supplier-onboarding/wsdl" xmlns:ns="http://xmlns.example.com/oic/supplier-onboarding">
+   <wsdl:types>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://xmlns.example.com/oic/supplier-onboarding" schemaLocation="SupplierOnboardingRequest.xsd"/>
+         <xsd:import namespace="http://xmlns.example.com/oic/supplier-onboarding" schemaLocation="SupplierOnboardingResponse.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="Request"><wsdl:part name="body" element="ns:SupplierOnboardingRequest"/></wsdl:message>
+   <wsdl:message name="Response"><wsdl:part name="body" element="ns:SupplierOnboardingResponse"/></wsdl:message>
+   <wsdl:portType name="SupplierOnboarding_ptt">
+      <wsdl:operation name="createSupplier"><wsdl:input message="tns:Request"/><wsdl:output message="tns:Response"/></wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

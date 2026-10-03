@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appInstance xmlns="http://www.oracle.com/2014/03/ics/appinstance">
+   <code>ORACLE_ERP_CLOUD_REST</code>
+   <name>Oracle ERP Cloud REST</name>
+   <version>01.00.0000</version>
+   <adapterType>rest</adapterType>
+   <role>INVOKE</role>
+   <description>Invoke connection to Oracle Fusion Procurement (Suppliers REST API). Configure the base URL and credentials after import.</description>
+   <connectionProperties>
+      <property name="connectionType" value="REST API Base URL"/>
+      <property name="connectionUrl" value="https://your-erp-host.fa.ocs.oraclecloud.com"/>
+   </connectionProperties>
+   <securityPolicy>BASIC_AUTH</securityPolicy>
+</appInstance>
