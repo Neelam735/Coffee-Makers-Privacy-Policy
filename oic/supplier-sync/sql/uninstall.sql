@@ -1,0 +1,21 @@
+-- Removes every XX_SUP object (DATA IS LOST).
+DROP VIEW xx_sup_work_v;
+DROP VIEW xx_sup_result_v;
+DROP VIEW xx_sup_bank_v;
+DROP VIEW xx_sup_tax_v;
+DROP VIEW xx_sup_contact_v;
+DROP VIEW xx_sup_site_v;
+DROP VIEW xx_sup_address_v;
+DROP VIEW xx_sup_header_v;
+DROP VIEW xx_sup_req_v;
+DROP PACKAGE xx_sup_pkg;
+DROP TABLE xx_sup_log PURGE;
+DROP TABLE xx_sup_req_bank PURGE;
+DROP TABLE xx_sup_req_tax PURGE;
+DROP TABLE xx_sup_req_contact PURGE;
+DROP TABLE xx_sup_req_site PURGE;
+DROP TABLE xx_sup_req_address PURGE;
+DROP TABLE xx_sup_req_header PURGE;
+DROP TABLE xx_sup_req PURGE;
+DROP TABLE xx_sup_xref PURGE;
+DROP TABLE xx_sup_master PURGE;
